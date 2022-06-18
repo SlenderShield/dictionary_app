@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Roboto Light", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -34,11 +36,28 @@ body {
 .wrapper .info-text {
     font-size: 13px;
     color: #9a9a9a;
-    margin: -3px 0 1px;
+    margin: -3px 0;
 }
 
-.wrapper ul {
+.wrapper.active .info-text {
     display: none;
+}
+
+.info-text span {
+    font-weight: 500;
+}
+
+
+.wrapper ul {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.wrapper.active ul {
+    height: 300px;
+    opacity: 1;
 }
 
 .search input {
@@ -101,6 +120,15 @@ ul li:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: 0;
+}
+
+ul .content {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+ul .content::-webkit-scrollbar {
+    width: 0;
 }
 
 ul .word p {
