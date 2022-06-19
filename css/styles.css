@@ -99,7 +99,7 @@ body {
 .search span {
     right: 15px;
     font-size: 16px;
-    pointer-events: none;
+    cursor: pointer;
     display: none;
 }
 

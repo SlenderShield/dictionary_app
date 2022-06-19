@@ -3,6 +3,7 @@ searchInput = wrapper.querySelector("input")
 synonyms = wrapper.querySelector(".synonyms .list")
 const infoText = wrapper.querySelector(".info-text")
 volumeIcon = wrapper.querySelector(".word i")
+removeIcon = wrapper.querySelector(".search span")
 
 let audio;
 
@@ -14,15 +15,22 @@ function data(result, word) {
         console.log(result)
         wrapper.classList.add("active");
 
-        let definitions = result[0].meanings[0].definitions[0];
+        let definitions = result[0].meanings[0].definitions[0], phonetics;
 
-        let phonetics = `${result[0].meanings[0].partOfSpeech}  ${result[0].phonetics[0].text}`
+        if (result[0].phonetics[0].text == undefined) {
+            phonetics = `${result[0].meanings[0].partOfSpeech}`
+        } else {
+            phonetics = `${result[0].meanings[0].partOfSpeech}  ${result[0].phonetics[0].text}`
+        }
         //    Add data to its particular place
         document.querySelector(".word p").innerText = result[0].word;
         document.querySelector(".word span").innerText = phonetics;
         // audio of the word
-        audio = new Audio("https:" + result[0].phonetics.audio)
-
+        if (result[0].phonetics[0].audio == '') {
+            audio = new Audio(result[0].phonetics[1].audio)
+        } else {
+            audio = new Audio(result[0].phonetics[0].audio)
+        }
         document.querySelector(".meaning span").innerText = definitions.definition;
 
         if (definitions.example == undefined) {
@@ -42,7 +50,7 @@ function data(result, word) {
                 if (definitions.synonyms[i] == undefined) {
                     continue
                 }
-                let tag = `<span>${definitions.synonyms[i]}</span>`
+                let tag = `<span onclick=search('${definitions.synonyms[i]}')>${definitions.synonyms[i]}</span>`
                 // Add synonyms beforehand
                 synonyms.insertAdjacentHTML("beforeend", tag);
             }
@@ -50,9 +58,18 @@ function data(result, word) {
     }
 }
 
+// function for searching the synonyms
+function search(word) {
+    searchInput.value = word;
+    fetchApi(word)
+    wrapper.classList.add("active")
+
+}
+
 
 // Function for handling api calls
 function fetchApi(word) {
+    wrapper.classList.remove("active")
     infoText.style.color = '#000'
     infoText.innerHTML = `Searching the meaning of <span>"${word}"</span>`
 
@@ -68,4 +85,17 @@ searchInput.addEventListener("keyup", event => {
         fetchApi(event.target.value)
 
     }
+})
+
+volumeIcon.addEventListener("click", () => {
+    audio.play();
+})
+
+removeIcon.addEventListener("click", () => {
+    searchInput.value = ""
+    searchInput.focus()
+    wrapper.classList.remove("active")
+    infoText.style.color = '#9a9a9a'
+    infoText.innerHTML = `Type the word you want to search to get the examples, pronunciation, and synonyms of the
+	                     given word`
 })
