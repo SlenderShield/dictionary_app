@@ -122,15 +122,6 @@ ul li:last-child {
     border-bottom: 0;
 }
 
-ul .content {
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-ul .content::-webkit-scrollbar {
-    width: 0;
-}
-
 ul .word p {
     font-size: 22px;
     font-weight: 500;
@@ -146,6 +137,15 @@ ul .word i {
     cursor: pointer;
     font-size: 15px;
     color: #999999;
+}
+
+ul .content {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+ul .content::-webkit-scrollbar {
+    width: 0;
 }
 
 .content li .details {

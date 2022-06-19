@@ -1,6 +1,10 @@
 const wrapper = document.querySelector(".wrapper");
 searchInput = wrapper.querySelector("input")
+synonyms = wrapper.querySelector(".synonyms .list")
 const infoText = wrapper.querySelector(".info-text")
+volumeIcon = wrapper.querySelector(".word i")
+
+let audio;
 
 // Function to handle the data sent by the api call
 function data(result, word) {
@@ -12,13 +16,37 @@ function data(result, word) {
 
         let definitions = result[0].meanings[0].definitions[0];
 
-        phonetics = `${result[0].meanings[0].partOfSpeech} / ${result[0].phonetics[0].text}`
+        let phonetics = `${result[0].meanings[0].partOfSpeech}  ${result[0].phonetics[0].text}`
         //    Add data to its particular place
         document.querySelector(".word p").innerText = result[0].word;
         document.querySelector(".word span").innerText = phonetics;
+        // audio of the word
+        audio = new Audio("https:" + result[0].phonetics.audio)
 
-        document.querySelector(".word span").innerText = definitions.definition;
-        document.querySelector(".example span").innerText = definitions.example;
+        document.querySelector(".meaning span").innerText = definitions.definition;
+
+        if (definitions.example == undefined) {
+            document.querySelector(".example").style.display = "none";
+        } else {
+            document.querySelector(".example").style.display = "block";
+            document.querySelector(".example span").innerText = definitions.example;
+        }
+        // If there is no synonyms then remove the synonyms block
+        if (definitions.synonyms[0] == undefined) {
+            synonyms.parentElement.style.display = "none";
+        } else {
+            synonyms.parentElement.style.display = "block";
+            synonyms.innerHTML = "";
+            for (let i = 0; i < 5; i++) {
+                // if any value is undefined then continue to another
+                if (definitions.synonyms[i] == undefined) {
+                    continue
+                }
+                let tag = `<span>${definitions.synonyms[i]}</span>`
+                // Add synonyms beforehand
+                synonyms.insertAdjacentHTML("beforeend", tag);
+            }
+        }
     }
 }
 
